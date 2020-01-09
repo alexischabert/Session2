@@ -1,0 +1,74 @@
+---
+title: "Mission Impossible 3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Import data
+
+You need to import this dataset to do this mission impossible 3.
+
+```{r}
+library(readr)
+gdp5 <- read_csv("mi3DataGdp5.csv")
+gdp5$X1 <- NULL
+gdp5
+```
+
+# Computing Summary Statistics 
+
+Calculate the mean gdp per country using the gdp5.
+```{r}
+library(stats)
+gdp6 <- aggregate(gdp ~ country, data = gdp5, mean)
+gdp6
+```
+
+
+# Create a bar chart 
+
+
+
+```{r}
+library(ggplot2)
+ggplot(gdp6) +
+ aes(x = country, fill = country, weight = gdp) +
+ geom_bar() +
+ scale_fill_hue() +
+ labs(x = "Country", y = "Gross domestic product", title = "Gross Domestic Product by Countries", subtitle = "mean from 1960 to 2015") +
+ theme_minimal()
+```
+
+# Create a map
+
+
+```{r}
+library(gsheet)
+library(dplyr)
+locations <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1VUxLOL2GH2ULrZ-lqQUa5IPKeSH-4dy_hTevZUyqbv4/edit#gid=0")
+colnames(locations)[1] <- "country"
+gdp7 <- left_join(gdp6, locations, by = "country")
+```
+
+```{r}
+library(leaflet)
+leaflet(data = gdp7) %>%
+  addTiles() %>%
+  addMarkers(lng=~Lng, lat=~Lat, popup=~country)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
