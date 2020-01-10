@@ -1,0 +1,119 @@
+---
+title: "Untitled"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Rename
+library(dplyr)
+#name <- rename(name, country=name)
+```
+
+```{r}
+#alligne <- left_join(name, energy3, by = "country")
+
+```
+
+```{r}
+#Récupération des données : Energy use (kg of oil equivalent) per $1,000 GDP
+
+library(WDI)
+listOfIndicators <- WDIsearch("GDP")
+
+energy <- WDI(indicator ="EG.USE.COMM.GD.PP.KD",
+                   start=1990,
+                   end=2015)
+```
+
+```{r}
+#Calcul de la moyenne par pays
+
+library(stats)
+energy2 <- aggregate(EG.USE.COMM.GD.PP.KD ~ country, data = energy, mean)
+energy3 <- energy2
+
+#supprimer les colonnes en trop
+energy2$country <- NULL
+energy3$country <- NULL
+```
+
+
+```{r}
+library(leaflet)
+# Initialize the leaflet map with the leaflet() function
+m <- leaflet()
+# Then we Add default OpenStreetMap map tiles
+m <- addTiles(m)
+ 
+# Same stuff but using the %>% operator
+m <- leaflet() %>% 
+  addTiles()
+```
+
+
+```{r}
+
+# Download the shapefile. (note that I store it in a folder called DATA. You have to change that if needed.)
+#download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip" , destfile="DATA/world_shape_file.zip")
+# You now have it in your current working directory, have a look!
+
+# Unzip this file. You can do it with R (as below), or clicking on the object you downloaded.
+#system("unzip DATA/world_shape_file.zip")
+#  -- > You now have 4 files. One of these files is a .shp file! (TM_WORLD_BORDERS_SIMPL-0.3.shp)
+```
+
+```{r}
+
+# Read this shape file with the rgdal library. 
+
+#library(rgdal)
+#world_spdf <- readOGR( 
+#  dsn= paste0(getwd(),"/DATA/world_shape_file/") , 
+#  layer="TM_WORLD_BORDERS_SIMPL-0.3",
+#  verbose=FALSE
+#)
+
+                          #ce qui est au dessus ne fonctionne pas, le code ci-dessous fonctionne.
+
+library(raster)
+energy3 <- shapefile("TM_WORLD_BORDERS_SIMPL-0.3.shp")
+verbose=FALSE
+
+# Clean the data object
+library(dplyr)
+energy3$EG.USE.COMM.GD.PP.KD[ which(energy3$EG.USE.COMM.GD.PP.KD == 0)] = NA
+energy3$EG.USE.COMM.GD.PP.KD <- as.numeric(as.character(energy3$EG.USE.COMM.GD.PP.KD)) / 1000000 %>% round(2)
+```
+
+```{r,error=FALSE}
+# Library
+library(leaflet)
+
+# Create a color palette for the map:
+mypalette <- colorNumeric( palette="viridis", domain=energy3$EG.USE.COMM.GD.PP.KD, na.color="transparent")
+mypalette(c(45,43))
+
+# Basic choropleth with leaflet?
+m <- leaflet(world_spdf) %>% 
+  addTiles()  %>% 
+  setView( lat=10, lng=0 , zoom=2) %>%
+  addPolygons(fillColor = ~mypalette(POP2005), stroke=FALSE )
+```
+
+```{r}
+# Color by quantile
+library(leaflet)
+m <- leaflet(world_spdf)%>% addTiles()  %>% setView( lat=10, lng=0 , zoom=2) %>%
+  addPolygons( stroke = FALSE, fillOpacity = 0.5, smoothFactor = 0.5, color = ~colorQuantile("YlOrRd", alligne$EG.USE.COMM.GD.PP.KD)(alligne$EG.USE.COMM.GD.PP.KD) )
+m
+```
+
+
+

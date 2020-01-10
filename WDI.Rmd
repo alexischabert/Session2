@@ -1,0 +1,63 @@
+---
+title: "Untitled"
+author: "SKEMA Global Lab in AI"
+date: "09/01/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r cars}
+library(WDI)
+loi <- WDIsearch("GDP")
+loi
+```
+
+```{r}
+library(WDI)
+stockTradedUS <- WDI(indicator ="CM.MKT.TRAD.GD.ZS",
+                   country = c("US"),
+                   start=1984,
+                   end=2019)
+stockTradedUS
+```
+```{r}
+library(WDI)
+stockTraded <- WDI(indicator ="CM.MKT.TRAD.GD.ZS",
+                   country = c("US", "CN"),
+                   start=1975,
+                   end=2019)
+stockTraded
+```
+
+```{r}
+library(ggplot2)
+library(ggthemes)
+
+ggplot(data = stockTraded, aes(x = year, y = CM.MKT.TRAD.GD.ZS, fill = country)) + 
+  geom_bar(stat = "identity", width = 0.5, position = "dodge")  +  
+  ylab("% of GDP")  +
+  xlab("") +
+  labs(title = "Total amount of stocks traded") +
+  guides(col = guide_legend(row = 1)) +
+  theme_hc() +
+  theme(axis.text.x = element_text(angle = 55, hjust = 1)) +
+  scale_x_continuous(breaks=stockTraded$year)
+```
+
+```{r}
+ggplot(data = stockTradedUS, aes(x = year, y = CM.MKT.TRAD.GD.ZS)) +
+  geom_line()  + 
+  ylab("Exchange rate between $US and Euro")  +
+  xlab("") +
+  geom_smooth(span = 0.6) +
+  ggtitle("") +
+  theme_hc() +
+  guides(fill=FALSE) +
+  geom_point(colour = "blue", size = 2,shape = 22)
+```
+
