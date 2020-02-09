@@ -1,0 +1,87 @@
+---
+title: "__Share price evolution of the 4 largest mining companies in South Africa (by market capitalization)__"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+###	__KUMBA IRON ORE LIMITED__
+```{r,  include=FALSE}
+library(quantmod)
+
+getSymbols("KIO",src="yahoo", from="2017-08-01") 
+head(KIO)
+```
+
+
+```{r}
+barChart(KIO)
+```
+
+###	__AFRICAN RAINBOW MINERALS LIMITED__
+```{r,  include=FALSE}
+getSymbols("ARI",src="yahoo", from="2017-08-01") 
+head(ARI)
+```
+
+
+```{r}
+barChart(ARI)
+```
+
+### __ASSORE LIMITED__
+```{r,  include=FALSE}
+getSymbols("ASR",src="yahoo", from="2017-08-01") 
+head(ASR)
+```
+
+
+```{r}
+barChart(ASR)
+
+```
+
+###	__ANGLO AMERICAN PLATINUM LIMITED__
+```{r,  include=FALSE}
+getSymbols("AMS",src="yahoo", from="2017-08-01") 
+head(AMS)
+```
+
+
+```{r}
+barChart(AMS)
+```
+
+
+
+Column
+-------------------------------------
+    
+### __COMMENT__
+   
+    
+On the left of this page, it has been made possible to compare the share price evolution of the 4 largest mining companies in South Africa (by market capitalization) :  
+- KUMBA IRON ORE LIMITED  
+- AFRICAN RAINBOW MINERALS LIMITED  
+- ASSORE LIMITED  
+- ANGLO AMERICAN PLATINUM LIMITED  
+
+The time period is from 2017-08-01 to today, it is the same for all the graphs to be able to compare them without scale difficulties. This way, by clicking on the different tabs, the graphics overlaps perfectly.
+
+### __ANALYSE__
+   
+By comparing these different graphs, it is possible to highlight the dip in the middle of it. This shows a big drop in the valuation of South African mining companies at the end of 2018.
+   
+   In fact, reading the news of this period, we can see that the world price of raw materials has fallen. South Africa has been particularly affected because of many factors.
+   On the __political__ and __social__ aspects, the government has prevented the dismissal of employees in the mining sector and is in the process of increasing overall wages.
+   On the __economical__ aspect, there is a lack of investments in mines and decreasing soil resources are forcing mining companies to dig deeper and deeper.
+   
+   Thus, we can see through these graphs __a risk for South Africa__, which is highly dependent on its mineral resources, which are both exhaustible and require large financial investments. 

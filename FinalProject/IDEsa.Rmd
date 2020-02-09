@@ -1,0 +1,57 @@
+---
+title: "SouthAfricaMap"
+author: "AlexisChabert"
+date: "03/02/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+#library(OECD)
+#search<-get_datasets()
+#dataIDE<-get_data_structure("FDI_FLOW_AGGR")
+#filter_list <- list(c("D"), "ZAF", "USD")
+#"IDEfra <- get_dataset(dataset="FDI_FLOW_AGGR", filter = filter_list)
+#IDEfra
+
+```
+
+#	ANGLO AMERICAN PLATINUM LIMITED
+```{r}
+library(quantmod)
+
+
+getSymbols("AMS",src="yahoo", from="2017-06-01") 
+head(AMS)
+barChart(AMS)
+```
+
+#	KUMBA IRON ORE LIMITED
+```{r}
+
+getSymbols("KIO",src="yahoo", from="2017-06-01") 
+head(KIO)
+barChart(KIO)
+```
+
+#	AFRICAN RAINBOW MINERALS LIMITED
+```{r}
+
+getSymbols("ARI",src="yahoo", from="2017-06-01") 
+head(ARI)
+barChart(ARI)
+```
+
+# ASSORE LIMITED
+```{r}
+
+getSymbols("ASR",src="yahoo", from="2017-06-01") 
+head(ASR)
+barChart(ASR)
+
+```
+
+
